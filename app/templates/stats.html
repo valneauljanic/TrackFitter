@@ -1,31 +1,92 @@
 {% extends "base.html" %}
 {% block title %}Statistika – TrackFitter{% endblock %}
 {% block content %}
-<h1>Mjesečna statistika</h1>
-<form method="get">
-  <label>Godina <input type="number" name="year" value="{{ year }}"></label>
-  <label>Mjesec <input type="number" name="month" min="1" max="12" value="{{ month }}"></label>
-  <button>Prikaži</button>
+
+<h1 class="mb-3">Mjesečna statistika</h1>
+
+<form method="get" class="row g-3 mb-4">
+  <div class="col-md-2">
+    <label class="form-label">Godina</label>
+    <input type="number" name="year" class="form-control" min="2000" value="{{ year }}">
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Mjesec</label>
+    <input type="number" name="month" class="form-control" min="1" max="12" value="{{ month }}">
+  </div>
+  <div class="col-md-2 align-self-end">
+    <button class="btn btn-primary">Prikaži</button>
+  </div>
 </form>
-<p>
-  Ukupno treninga: {{ ukupno_treninga }} |
-  Ukupno trajanje: {{ ukupno_trajanje }} min |
-  Prosječni intenzitet: {{ prosjecni_intenzitet }}
-</p>
-<h3>Po vrsti</h3>
-<ul>
-{% for vrsta, agg in po_vrsti.items() %}
-  <li>{{ vrsta }} — broj: {{ agg.broj }}, trajanje: {{ agg.trajanje }} min</li>
-{% else %}
-  <li>Nema podataka za odabrani period.</li>
-{% endfor %}
-</ul>
-<h3>Dnevno trajanje</h3>
-<ul>
-{% for d, mins in by_day|dictsort %}
-  <li>{{ d }} — {{ mins }} min</li>
-{% else %}
-  <li>Nema podataka.</li>
-{% endfor %}
-</ul>
+
+<div class="mb-3">
+  <strong>Ukupno treninga:</strong> {{ ukupno_treninga }} |
+  <strong>Ukupno trajanje:</strong> {{ ukupno_trajanje }} min |
+  <strong>Prosječni intenzitet:</strong> {{ prosjecni_intenzitet }}
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <h5>Minuta po danu</h5>
+    <canvas id="byDayChart" height="120"></canvas>
+  </div>
+  <div class="col-lg-6">
+    <h5>Broj treninga po vrsti</h5>
+    <canvas id="typeCountChart" height="120"></canvas>
+  </div>
+</div>
+
+<hr class="my-4">
+
+<h5>Po vrsti treninga (tablica)</h5>
+<table class="table table-sm table-bordered mb-4">
+  <thead><tr><th>Vrsta</th><th>Broj</th><th>Trajanje (min)</th></tr></thead>
+  <tbody>
+  {% for vrsta, agg in po_vrsti.items() %}
+    <tr><td>{{ vrsta }}</td><td>{{ agg.broj }}</td><td>{{ agg.trajanje }}</td></tr>
+  {% else %}
+    <tr><td colspan="3" class="text-muted">Nema podataka za odabrani period.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h5>Dnevno trajanje (tablica)</h5>
+<table class="table table-sm table-bordered">
+  <thead><tr><th>Datum</th><th>Trajanje (min)</th></tr></thead>
+  <tbody>
+  {% for d, mins in by_day|dictsort %}
+    <tr><td>{{ d }}</td><td>{{ mins }}</td></tr>
+  {% else %}
+    <tr><td colspan="2" class="text-muted">Nema podataka.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Podaci iz backenda
+  const labelsByDay = {{ labels_by_day|tojson }};
+  const dataByDay = {{ data_by_day|tojson }};
+  const labelsTypes = {{ labels_types|tojson }};
+  const dataTypesCount = {{ data_types_count|tojson }};
+
+  // Linijski graf: minuta po danu
+  new Chart(document.getElementById('byDayChart'), {
+    type: 'line',
+    data: {
+      labels: labelsByDay,
+      datasets: [{ label: 'Minuta', data: dataByDay }]
+    }
+  });
+
+  // Stupčasti graf: broj treninga po vrsti
+  new Chart(document.getElementById('typeCountChart'), {
+    type: 'bar',
+    data: {
+      labels: labelsTypes,
+      datasets: [{ label: 'Broj treninga', data: dataTypesCount }]
+    }
+  });
+</script>
+
 {% endblock %}
