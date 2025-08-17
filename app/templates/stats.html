@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Statistika – TrackFitter{% endblock %}
+{% block content %}
+<h1>Mjesečna statistika</h1>
+<form method="get">
+  <label>Godina <input type="number" name="year" value="{{ year }}"></label>
+  <label>Mjesec <input type="number" name="month" min="1" max="12" value="{{ month }}"></label>
+  <button>Prikaži</button>
+</form>
+<p>
+  Ukupno treninga: {{ ukupno_treninga }} |
+  Ukupno trajanje: {{ ukupno_trajanje }} min |
+  Prosječni intenzitet: {{ prosjecni_intenzitet }}
+</p>
+<h3>Po vrsti</h3>
+<ul>
+{% for vrsta, agg in po_vrsti.items() %}
+  <li>{{ vrsta }} — broj: {{ agg.broj }}, trajanje: {{ agg.trajanje }} min</li>
+{% else %}
+  <li>Nema podataka za odabrani period.</li>
+{% endfor %}
+</ul>
+<h3>Dnevno trajanje</h3>
+<ul>
+{% for d, mins in by_day|dictsort %}
+  <li>{{ d }} — {{ mins }} min</li>
+{% else %}
+  <li>Nema podataka.</li>
+{% endfor %}
+</ul>
+{% endblock %}

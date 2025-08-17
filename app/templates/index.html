@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Treninzi – TrackFitter{% endblock %}
+{% block content %}
+
+<h1 class="mb-3">Treninzi</h1>
+
+<form action="{{ url_for('create_trening_form') }}" method="post" class="row g-3 mb-4">
+  <div class="col-md-3">
+    <label class="form-label">Datum</label>
+    <input type="date" name="datum" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Vrijeme</label>
+    <input type="time" name="vrijeme" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Intenzitet (1–10)</label>
+    <input type="number" name="intenzitet" min="1" max="10" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Trajanje (min)</label>
+    <input type="number" name="trajanje" min="1" class="form-control" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Vrsta</label>
+    <input type="text" name="vrsta_treninga" class="form-control" required>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary">Spremi</button>
+    <a href="{{ url_for('stats_page') }}" class="btn btn-outline-secondary ms-2">Statistika</a>
+  </div>
+</form>
+
+<table class="table table-striped align-middle">
+  <thead>
+    <tr>
+      <th>ID</th><th>Datum</th><th>Vrijeme</th><th>Intenzitet</th><th>Trajanje</th><th>Vrsta</th><th class="text-end">Akcije</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for t in treninzi %}
+    <tr>
+      <td>{{ t.id_treninga }}</td>
+      <td>{{ t.datum.isoformat() }}</td>
+      <td>{{ (t.vrijeme[:5]) if (t.vrijeme is string) else ("%02d:%02d"|format(t.vrijeme.hour, t.vrijeme.minute)) }}</td>
+      <td>{{ t.intenzitet }}</td>
+      <td>{{ t.trajanje }} min</td>
+      <td>{{ t.vrsta_treninga }}</td>
+      <td class="text-end">
+        <a class="btn btn-sm btn-outline-secondary me-2" href="{{ url_for('edit_trening_page', tid=t.id_treninga) }}">Uredi</a>
+        <form action="{{ url_for('delete_trening_form', tid=t.id_treninga) }}" method="post" class="d-inline">
+          <button class="btn btn-sm btn-danger" onclick="return confirm('Obrisati zapis?')">Obriši</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="text-muted">Nema zapisa.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

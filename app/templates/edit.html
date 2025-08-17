@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Uredi trening – TrackFitter{% endblock %}
+{% block content %}
+
+<h1 class="mb-3">Uredi trening #{{ t.id_treninga }}</h1>
+
+<form action="{{ url_for('update_trening_form', tid=t.id_treninga) }}" method="post" class="row g-3 mb-4">
+  <div class="col-md-3">
+    <label class="form-label">Datum</label>
+    <input type="date" name="datum" class="form-control" value="{{ t.datum.isoformat() }}" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Vrijeme</label>
+    <input type="time" name="vrijeme" class="form-control" value="{{ (t.vrijeme[:5]) if (t.vrijeme is string) else ("%02d:%02d"|format(t.vrijeme.hour, t.vrijeme.minute)) }}" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Intenzitet (1–10)</label>
+    <input type="number" name="intenzitet" min="1" max="10" class="form-control" value="{{ t.intenzitet }}" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Trajanje (min)</label>
+    <input type="number" name="trajanje" min="1" class="form-control" value="{{ t.trajanje }}" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Vrsta</label>
+    <input type="text" name="vrsta_treninga" class="form-control" value="{{ t.vrsta_treninga }}" required>
+  </div>
+  <div class="col-12">
+    <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">Odustani</a>
+    <button class="btn btn-primary ms-2">Spremi promjene</button>
+  </div>
+</form>
+
+{% endblock %}
