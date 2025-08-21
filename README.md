@@ -13,6 +13,16 @@
 - Vizualizacije (linijski i stupčasti graf)
 - REST API rute u JSON-u
 
+## Tehnologije
+
+- Python 3.11
+- Flask
+- PonyORM
+- SQLite
+- HTML/CSS/Bootstrap
+- Chart.js
+- Docker/Compose
+
 ## Kloniranje repozitorija i pokretanje s Docker Compose (port 8000)
 ```bash
 git clone https://github.com/valneauljanic/TrackFitter.git
@@ -23,12 +33,4 @@ Otvori u pregledniku
 [http://localhost:8000/](http://localhost:8000/)
 
 
-## Tehnologije
 
-Python 3.11
-- Flask
-- PonyORM
-- SQLite
-- HTML/CSS/Bootstrap
-- Chart.js
-- Docker/Compose
