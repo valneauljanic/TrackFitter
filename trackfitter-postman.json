@@ -1,0 +1,68 @@
+{
+  "info": {
+    "name": "TrackFitter API",
+    "_postman_id": "7c3e6c3d-2e4f-4e89-8b4b-111111111111",
+    "description": "CRUD nad treninzima + mjesečna statistika",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET — Lista svih treninga",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/treninzi"
+      }
+    },
+    {
+      "name": "POST — Kreiraj trening",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"datum\": \"2025-08-10\",\n  \"vrijeme\": \"18:30\",\n  \"intenzitet\": 7,\n  \"trajanje\": 40,\n  \"vrsta_treninga\": \"trcanje\"\n}"
+        },
+        "url": "{{baseUrl}}/api/treninzi"
+      }
+    },
+    {
+      "name": "GET — Dohvati trening po ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/treninzi/{{id}}"
+      }
+    },
+    {
+      "name": "PUT — Ažuriraj trening (primjer)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"intenzitet\": 8,\n  \"trajanje\": 45\n}"
+        },
+        "url": "{{baseUrl}}/api/treninzi/{{id}}"
+      }
+    },
+    {
+      "name": "DELETE — Obriši trening",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/treninzi/{{id}}"
+      }
+    },
+    {
+      "name": "GET — Statistika mjeseca",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/stats/mjesec?year={{year}}&month={{month}}"
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "id", "value": "1" },
+    { "key": "year", "value": "2025" },
+    { "key": "month", "value": "8" }
+  ]
+}
