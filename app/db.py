@@ -8,8 +8,8 @@ class Trening(db.Entity):
     id_treninga = PrimaryKey(int, auto=True)
     datum = Required(date)
     vrijeme = Required(time)
-    intenzitet = Required(int)        # 1–10
-    trajanje = Required(int)          # minute
-    vrsta_treninga = Required(str)    # npr. "trčanje"
+    intenzitet = Required(int)       
+    trajanje = Required(int)         
+    vrsta_treninga = Required(str)    
 
 db.generate_mapping(create_tables=True)

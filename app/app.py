@@ -17,7 +17,7 @@ def parse_hhmm(s):
             continue
     raise ValueError(f"Neispravno vrijeme: {s!r} (očekujem HH:MM ili HH:MM:SS)")
 
-# ---------- HTML (templating) ----------
+# HTML (templating)
 @app.route("/")
 @db_session
 def home():
@@ -77,7 +77,7 @@ def stats_page():
     year = request.args.get("year", default=datetime.now().year, type=int)
     month = request.args.get("month", default=datetime.now().month, type=int)
 
-    # filtriraj
+    # filtrirat
     treninzi = select(t for t in Trening if t.datum.year == year and t.datum.month == month)[:]
 
     # agregati
@@ -85,20 +85,20 @@ def stats_page():
     ukupno_trajanje = sum(t.trajanje for t in treninzi) if treninzi else 0
     prosjecni_intenzitet = round(sum(t.intenzitet for t in treninzi)/ukupno_treninga, 2) if treninzi else 0
 
-    # po vrsti (broj i trajanje)
+    # po vrsti, broj i trajanje
     po_vrsti = {}
     for t in treninzi:
         g = po_vrsti.setdefault(t.vrsta_treninga, {"broj": 0, "trajanje": 0})
         g["broj"] += 1
         g["trajanje"] += t.trajanje
 
-    # po danu (zbroj minuta/dan)
+    # po danu minute/dani
     by_day = {}
     for t in treninzi:
         d = t.datum.isoformat()
         by_day[d] = by_day.get(d, 0) + t.trajanje
 
-    # --- priprema nizova za Chart.js ---
+    # za nizove za Chart.js
     labels_by_day = sorted(by_day.keys())
     data_by_day = [by_day[d] for d in labels_by_day]
 
@@ -121,7 +121,7 @@ def stats_page():
         data_types_duration=data_types_duration
     )
 
-# ---------- REST API ----------
+# REST API
 @app.route("/api/treninzi", methods=["GET"])
 @db_session
 def list_treninzi():

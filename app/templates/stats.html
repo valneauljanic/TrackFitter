@@ -39,25 +39,47 @@
 
 <h5>Po vrsti treninga (tablica)</h5>
 <table class="table table-sm table-bordered mb-4">
-  <thead><tr><th>Vrsta</th><th>Broj</th><th>Trajanje (min)</th></tr></thead>
+  <thead>
+    <tr>
+      <th>Vrsta</th>
+      <th>Broj</th>
+      <th>Trajanje (min)</th>
+    </tr>
+  </thead>
   <tbody>
-  {% for vrsta, agg in po_vrsti.items() %}
-    <tr><td>{{ vrsta }}</td><td>{{ agg.broj }}</td><td>{{ agg.trajanje }}</td></tr>
-  {% else %}
-    <tr><td colspan="3" class="text-muted">Nema podataka za odabrani period.</td></tr>
-  {% endfor %}
+    {% for vrsta, agg in po_vrsti.items() %}
+    <tr>
+      <td>{{ vrsta }}</td>
+      <td>{{ agg.broj }}</td>
+      <td>{{ agg.trajanje }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="3" class="text-muted">Nema podataka za odabrani period.</td>
+    </tr>
+    {% endfor %}
   </tbody>
 </table>
 
 <h5>Dnevno trajanje (tablica)</h5>
 <table class="table table-sm table-bordered">
-  <thead><tr><th>Datum</th><th>Trajanje (min)</th></tr></thead>
+  <thead>
+    <tr>
+      <th>Datum</th>
+      <th>Trajanje (min)</th>
+    </tr>
+  </thead>
   <tbody>
-  {% for d, mins in by_day|dictsort %}
-    <tr><td>{{ d }}</td><td>{{ mins }}</td></tr>
-  {% else %}
-    <tr><td colspan="2" class="text-muted">Nema podataka.</td></tr>
-  {% endfor %}
+    {% for d, mins in by_day|dictsort %}
+    <tr>
+      <td>{{ d }}</td>
+      <td>{{ mins }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="2" class="text-muted">Nema podataka.</td>
+    </tr>
+    {% endfor %}
   </tbody>
 </table>
 
@@ -65,12 +87,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   // Podaci iz backenda
-  const labelsByDay = {{ labels_by_day|tojson }};
-  const dataByDay = {{ data_by_day|tojson }};
-  const labelsTypes = {{ labels_types|tojson }};
-  const dataTypesCount = {{ data_types_count|tojson }};
+  const labelsByDay = {{ labels_by_day| tojson }};
+  const dataByDay = {{ data_by_day| tojson }};
+  const labelsTypes = {{ labels_types| tojson }};
+  const dataTypesCount = {{ data_types_count| tojson }};
 
-  // Linijski graf: minuta po danu
+  // linijski graf minuta u danu
   new Chart(document.getElementById('byDayChart'), {
     type: 'line',
     data: {
@@ -79,7 +101,7 @@
     }
   });
 
-  // Stupčasti graf: broj treninga po vrsti
+  // Stupcasti graf broj treninga po vrsti
   new Chart(document.getElementById('typeCountChart'), {
     type: 'bar',
     data: {
